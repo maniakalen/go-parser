@@ -8,6 +8,7 @@ import (
 	"golang.org/x/net/html"
 )
 
+// ParseHtml parses the html body and checks if it contains any of the keywords
 func ParseHtml(body string, keywords []string) (bool, error) {
 	bodyReader := strings.NewReader(string(body))
 	doc, err := html.Parse(bodyReader)
@@ -18,6 +19,7 @@ func ParseHtml(body string, keywords []string) (bool, error) {
 	return scanNode(doc, keywords)
 }
 
+// returns true if any keyword is found in the body
 func scanNode(n *html.Node, keywords []string) (bool, error) {
 	if n.Type == html.ElementNode && (n.Data == "title") {
 		for _, keyword := range keywords {
