@@ -1,4 +1,4 @@
-module github.com/maniakalen/go-htmlscanner
+module github.com/maniakalen/go-parser
 
 go 1.24.0
 
