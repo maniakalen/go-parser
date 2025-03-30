@@ -45,7 +45,7 @@ func scanNode(n *html.Node, keywords []string) (bool, error) {
 	}
 	if n.Type == html.ElementNode && n.Data == "h1" {
 		for _, keyword := range keywords {
-			if strings.Contains(n.FirstChild.Data, keyword) {
+			if n.FirstChild != nil && len(n.FirstChild.Data) > 0 && strings.Contains(n.FirstChild.Data, keyword) {
 				return true, nil
 			}
 		}

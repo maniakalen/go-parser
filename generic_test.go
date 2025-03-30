@@ -50,6 +50,12 @@ func TestGenericParser(t *testing.T) {
 			keywords: []string{"hashone"},
 			result:   true,
 		},
+		{
+			name:     "None h1",
+			body:     "<html><title>some title</title><meta name=\"description\" content=\"some description\" /><meta name=\"keywords\" content=\"some keywords\" /><h1></h1></html>",
+			keywords: []string{"hashone"},
+			result:   false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
