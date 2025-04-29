@@ -5,6 +5,7 @@ import (
 	"log/slog"
 	"strings"
 
+	"github.com/microcosm-cc/bluemonday"
 	"golang.org/x/net/html"
 )
 
@@ -17,6 +18,7 @@ type MetaFinder struct {
 func GetPageMetaData(body string) (string, string, error) {
 	bodyReader := strings.NewReader(string(body))
 	doc, err := html.Parse(bodyReader)
+	stripper := bluemonday.StripTagsPolicy()
 	if err != nil {
 		slog.Error("unable to parse page body: " + err.Error())
 		return "", "", fmt.Errorf("unable to parse page body")
@@ -29,7 +31,7 @@ func GetPageMetaData(body string) (string, string, error) {
 	if err != nil {
 		return "", "", err
 	}
-	return title, desc, nil
+	return stripper.Sanitize(title), stripper.Sanitize(desc), nil
 }
 
 func scanNode(n *html.Node, tagName string, attr *MetaFinder) (string, error) {
