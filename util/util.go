@@ -42,12 +42,9 @@ func scanNode(n *html.Node, tagName string, attr *MetaFinder) (string, error) {
 		check := false
 		for _, a := range n.Attr {
 			if a.Key == attr.finderKey && a.Val == attr.finderValue {
-				fmt.Printf("%+v %+v\n", a, attr)
 				check = true
 			}
-			fmt.Printf("%+v %+v %+v\n", a.Key, attr.valueKey, check)
 			if a.Key == attr.valueKey && check {
-				fmt.Printf("A %+v\n", a)
 				return a.Val, nil
 			}
 		}
