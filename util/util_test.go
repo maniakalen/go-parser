@@ -32,6 +32,18 @@ func TestGetMetaData(t *testing.T) {
 			title:       "test title",
 			description: "some description",
 		},
+		{
+			name:        "Test title none",
+			body:        "<html><title></title><meta name=\"description\" content=\"<h3><p>some description</p></\" /><meta name=\"keywords\" content=\"some keywords\" /><h1>test h1</h1></html>",
+			title:       "",
+			description: "some description",
+		},
+		{
+			name:        "Test desc none",
+			body:        "<html><title>test title</title><meta name=\"keywords\" content=\"some keywords\" /><h1>test h1</h1></html>",
+			title:       "test title",
+			description: "",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

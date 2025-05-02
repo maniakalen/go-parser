@@ -31,19 +31,20 @@ func GetPageMetaData(body string) (string, string, error) {
 	if err != nil {
 		return "", "", err
 	}
-	if title[len(title)-2:] == "</" {
+	if len(title) > 1 && title[len(title)-2:] == "</" {
 		title += "i>"
 	}
-	if desc[len(desc)-2:] == "</" {
+	if len(desc) > 1 && desc[len(desc)-2:] == "</" {
 		desc += "i>"
 	}
 	return stripper.Sanitize(html.UnescapeString(title)), stripper.Sanitize(html.UnescapeString(desc)), nil
 }
 
 func scanNode(n *html.Node, tagName string, attr *MetaFinder) (string, error) {
+	field := ""
 	if n.Type == html.ElementNode && n.Data == tagName {
-		if attr.finderKey == "" {
-			return n.FirstChild.Data, nil
+		if attr.finderKey == "" && n.FirstChild != nil {
+			field = n.FirstChild.Data
 		}
 		check := false
 		for _, a := range n.Attr {
@@ -51,7 +52,7 @@ func scanNode(n *html.Node, tagName string, attr *MetaFinder) (string, error) {
 				check = true
 			}
 			if a.Key == attr.valueKey && check {
-				return a.Val, nil
+				field = a.Val
 			}
 		}
 	}
@@ -62,5 +63,5 @@ func scanNode(n *html.Node, tagName string, attr *MetaFinder) (string, error) {
 			return text, err
 		}
 	}
-	return "", nil
+	return field, nil
 }
