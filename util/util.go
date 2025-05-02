@@ -31,6 +31,12 @@ func GetPageMetaData(body string) (string, string, error) {
 	if err != nil {
 		return "", "", err
 	}
+	if title[len(title)-2:] == "</" {
+		title += "i>"
+	}
+	if desc[len(desc)-2:] == "</" {
+		desc += "i>"
+	}
 	return stripper.Sanitize(html.UnescapeString(title)), stripper.Sanitize(html.UnescapeString(desc)), nil
 }
 
