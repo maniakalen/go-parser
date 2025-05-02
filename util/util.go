@@ -31,7 +31,7 @@ func GetPageMetaData(body string) (string, string, error) {
 	if err != nil {
 		return "", "", err
 	}
-	return stripper.Sanitize(title), stripper.Sanitize(desc), nil
+	return stripper.Sanitize(html.UnescapeString(title)), stripper.Sanitize(html.UnescapeString(desc)), nil
 }
 
 func scanNode(n *html.Node, tagName string, attr *MetaFinder) (string, error) {
