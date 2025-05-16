@@ -5,6 +5,7 @@ import (
 	"log/slog"
 	"strings"
 
+	"golang.org/x/exp/slices"
 	"golang.org/x/net/html"
 )
 
@@ -22,8 +23,9 @@ func ParseHtml(body string, keywords []string) (bool, error) {
 // returns true if any keyword is found in the body
 func scanNode(n *html.Node, keywords []string) (bool, error) {
 	if n.Type == html.ElementNode && (n.Data == "title") {
+		fields := strings.Fields(n.FirstChild.Data)
 		for _, keyword := range keywords {
-			if strings.Contains(n.FirstChild.Data, keyword) {
+			if slices.Contains(fields, keyword) {
 				return true, nil
 			}
 		}
@@ -35,8 +37,9 @@ func scanNode(n *html.Node, keywords []string) (bool, error) {
 				check = true
 			}
 			if a.Key == "content" && check {
+				fields := strings.Fields(a.Val)
 				for _, keyword := range keywords {
-					if strings.Contains(a.Val, keyword) {
+					if slices.Contains(fields, keyword) {
 						return true, nil
 					}
 				}
@@ -44,9 +47,12 @@ func scanNode(n *html.Node, keywords []string) (bool, error) {
 		}
 	}
 	if n.Type == html.ElementNode && n.Data == "h1" {
-		for _, keyword := range keywords {
-			if n.FirstChild != nil && len(n.FirstChild.Data) > 0 && strings.Contains(n.FirstChild.Data, keyword) {
-				return true, nil
+		if n.FirstChild != nil && len(n.FirstChild.Data) > 0 {
+			fields := strings.Fields(n.FirstChild.Data)
+			for _, keyword := range keywords {
+				if slices.Contains(fields, keyword) {
+					return true, nil
+				}
 			}
 		}
 	}
