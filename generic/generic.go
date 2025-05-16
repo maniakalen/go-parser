@@ -22,7 +22,7 @@ func ParseHtml(body string, keywords []string) (bool, error) {
 
 // returns true if any keyword is found in the body
 func scanNode(n *html.Node, keywords []string) (bool, error) {
-	if n.Type == html.ElementNode && n.Data == "title" && len(n.FirstChild.Data) > 0 {
+	if n.Type == html.ElementNode && n.Data == "title" && n.FirstChild != nil && len(n.FirstChild.Data) > 0 {
 		fields := strings.Fields(n.FirstChild.Data)
 		for _, keyword := range keywords {
 			if slices.Contains(fields, keyword) {
